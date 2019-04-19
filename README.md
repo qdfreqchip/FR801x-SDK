@@ -20,4 +20,5 @@ BUILDING IMAGE
 MORE
 
 * Feel free to access the developer forum: http://www.freqchip.net 
+* WeChat Public Account: FREQCHIP
  

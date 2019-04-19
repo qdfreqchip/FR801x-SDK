@@ -42,6 +42,7 @@ enum gap_event
 
 	GAP_EVT_CONNECT_FAILED,
 
+    GAP_EVT_PAIRING_REQ,
     GAP_EVT_BOND_SUCCESS,
 
 };
@@ -80,38 +81,38 @@ enum gap_event
  * These are the data type identifiers for the data tokens in the advertisement data field.
  * @{
  */
-#define GAP_ADTVYPE_FLAGS						 						 0x01 //!< Discovery Mode: @ref GAP_ADTYPE_FLAGS_MODES	
-#define GAP_ADVTYPE_16BIT_MORE                   0x02 //!< Service: More 16-bit UUIDs available
-#define GAP_ADVTYPE_16BIT_COMPLETE               0x03 //!< Service: Complete list of 16-bit UUIDs
-#define GAP_ADVTYPE_32BIT_MORE                   0x04 //!< Service: More 32-bit UUIDs available
-#define GAP_ADVTYPE_32BIT_COMPLETE               0x05 //!< Service: Complete list of 32-bit UUIDs
-#define GAP_ADVTYPE_128BIT_MORE                  0x06 //!< Service: More 128-bit UUIDs available
-#define GAP_ADVTYPE_128BIT_COMPLETE              0x07 //!< Service: Complete list of 128-bit UUIDs
-#define GAP_ADVTYPE_LOCAL_NAME_SHORT             0x08 //!< Shortened local name
-#define GAP_ADVTYPE_LOCAL_NAME_COMPLETE          0x09 //!< Complete local name
-#define GAP_ADVTYPE_POWER_LEVEL                  0x0A //!< TX Power Level: 0xXX: -127 to +127 dBm
-#define GAP_ADVTYPE_OOB_CLASS_OF_DEVICE          0x0D //!< Simple Pairing OOB Tag: Class of device (3 octets)
-#define GAP_ADVTYPE_OOB_SIMPLE_PAIRING_HASHC     0x0E //!< Simple Pairing OOB Tag: Simple Pairing Hash C (16 octets)
-#define GAP_ADVTYPE_OOB_SIMPLE_PAIRING_RANDR     0x0F //!< Simple Pairing OOB Tag: Simple Pairing Randomizer R (16 octets)
-#define GAP_ADVTYPE_SM_TK                        0x10 //!< Security Manager TK Value
-#define GAP_ADVTYPE_SM_OOB_FLAG                  0x11 //!< Secutiry Manager OOB Flags
-#define GAP_ADVTYPE_SLAVE_CONN_INTERVAL_RANGE    0x12 //!< Min and Max values of the connection interval (2 octets Min, 2 octets Max) (0xFFFF indicates no conn interval min or max)
-#define GAP_ADVTYPE_SIGNED_DATA                  0x13 //!< Signed Data field
-#define GAP_ADVTYPE_SERVICES_LIST_16BIT          0x14 //!< Service Solicitation: list of 16-bit Service UUIDs
-#define GAP_ADVTYPE_SERVICES_LIST_128BIT         0x15 //!< Service Solicitation: list of 128-bit Service UUIDs
-#define GAP_ADVTYPE_SERVICE_DATA                 0x16 //!< Service Data - 16-bit UUID
-#define GAP_ADVTYPE_PUBLIC_TARGET_ADDR           0x17 //!< Public Target Address
-#define GAP_ADVTYPE_RANDOM_TARGET_ADDR           0x18 //!< Random Target Address
-#define GAP_ADVTYPE_APPEARANCE                   0x19 //!< Appearance
-#define GAP_ADVTYPE_ADV_INTERVAL                 0x1A //!< Advertising Interval
-#define GAP_ADVTYPE_LE_BD_ADDR                   0x1B //!< LE Bluetooth Device Address
-#define GAP_ADVTYPE_LE_ROLE                      0x1C //!< LE Role
-#define GAP_ADVTYPE_SIMPLE_PAIRING_HASHC_256     0x1D //!< Simple Pairing Hash C-256
-#define GAP_ADVTYPE_SIMPLE_PAIRING_RANDR_256     0x1E //!< Simple Pairing Randomizer R-256
-#define GAP_ADVTYPE_SERVICE_DATA_32BIT           0x20 //!< Service Data - 32-bit UUID
-#define GAP_ADVTYPE_SERVICE_DATA_128BIT          0x21 //!< Service Data - 128-bit UUID
-#define GAP_ADVTYPE_3D_INFO_DATA                 0x3D //!< 3D Information Data
-#define GAP_ADVTYPE_MANUFACTURER_SPECIFIC        0xFF //!< Manufacturer Specific Data: first 2 octets contain the Company Identifier Code followed by the additional manufacturer specific data
+#define GAP_ADTVYPE_FLAGS                       0x01 //!< Discovery Mode: @ref GAP_ADTYPE_FLAGS_MODES	
+#define GAP_ADVTYPE_16BIT_MORE                  0x02 //!< Service: More 16-bit UUIDs available
+#define GAP_ADVTYPE_16BIT_COMPLETE              0x03 //!< Service: Complete list of 16-bit UUIDs
+#define GAP_ADVTYPE_32BIT_MORE                  0x04 //!< Service: More 32-bit UUIDs available
+#define GAP_ADVTYPE_32BIT_COMPLETE              0x05 //!< Service: Complete list of 32-bit UUIDs
+#define GAP_ADVTYPE_128BIT_MORE                 0x06 //!< Service: More 128-bit UUIDs available
+#define GAP_ADVTYPE_128BIT_COMPLETE             0x07 //!< Service: Complete list of 128-bit UUIDs
+#define GAP_ADVTYPE_LOCAL_NAME_SHORT            0x08 //!< Shortened local name
+#define GAP_ADVTYPE_LOCAL_NAME_COMPLETE         0x09 //!< Complete local name
+#define GAP_ADVTYPE_POWER_LEVEL                 0x0A //!< TX Power Level: 0xXX: -127 to +127 dBm
+#define GAP_ADVTYPE_OOB_CLASS_OF_DEVICE         0x0D //!< Simple Pairing OOB Tag: Class of device (3 octets)
+#define GAP_ADVTYPE_OOB_SIMPLE_PAIRING_HASHC    0x0E //!< Simple Pairing OOB Tag: Simple Pairing Hash C (16 octets)
+#define GAP_ADVTYPE_OOB_SIMPLE_PAIRING_RANDR    0x0F //!< Simple Pairing OOB Tag: Simple Pairing Randomizer R (16 octets)
+#define GAP_ADVTYPE_SM_TK                       0x10 //!< Security Manager TK Value
+#define GAP_ADVTYPE_SM_OOB_FLAG                 0x11 //!< Secutiry Manager OOB Flags
+#define GAP_ADVTYPE_SLAVE_CONN_INTERVAL_RANGE   0x12 //!< Min and Max values of the connection interval (2 octets Min, 2 octets Max) (0xFFFF indicates no conn interval min or max)
+#define GAP_ADVTYPE_SIGNED_DATA                 0x13 //!< Signed Data field
+#define GAP_ADVTYPE_SERVICES_LIST_16BIT         0x14 //!< Service Solicitation: list of 16-bit Service UUIDs
+#define GAP_ADVTYPE_SERVICES_LIST_128BIT        0x15 //!< Service Solicitation: list of 128-bit Service UUIDs
+#define GAP_ADVTYPE_SERVICE_DATA                0x16 //!< Service Data - 16-bit UUID
+#define GAP_ADVTYPE_PUBLIC_TARGET_ADDR          0x17 //!< Public Target Address
+#define GAP_ADVTYPE_RANDOM_TARGET_ADDR          0x18 //!< Random Target Address
+#define GAP_ADVTYPE_APPEARANCE                  0x19 //!< Appearance
+#define GAP_ADVTYPE_ADV_INTERVAL                0x1A //!< Advertising Interval
+#define GAP_ADVTYPE_LE_BD_ADDR                  0x1B //!< LE Bluetooth Device Address
+#define GAP_ADVTYPE_LE_ROLE                     0x1C //!< LE Role
+#define GAP_ADVTYPE_SIMPLE_PAIRING_HASHC_256    0x1D //!< Simple Pairing Hash C-256
+#define GAP_ADVTYPE_SIMPLE_PAIRING_RANDR_256    0x1E //!< Simple Pairing Randomizer R-256
+#define GAP_ADVTYPE_SERVICE_DATA_32BIT          0x20 //!< Service Data - 32-bit UUID
+#define GAP_ADVTYPE_SERVICE_DATA_128BIT         0x21 //!< Service Data - 128-bit UUID
+#define GAP_ADVTYPE_3D_INFO_DATA                0x3D //!< 3D Information Data
+#define GAP_ADVTYPE_MANUFACTURER_SPECIFIC       0xFF //!< Manufacturer Specific Data: first 2 octets contain the Company Identifier Code followed by the additional manufacturer specific data
 /** @} End GAP_ADVTYPE_DEFINES */
 
 
@@ -136,6 +137,16 @@ typedef struct
     uint8_t     adv_dis_mode;
     uint8_t     adv_filt_policy;
 }gap_adv_param_t;
+
+typedef struct
+{
+    uint8_t     mitm;               //!<        
+    uint8_t     ble_secure_conn;    //!< BLE Secure Simple Pairing, also called Secure Connection mode.
+    uint8_t     io_cap;             //!<        
+    uint8_t     bond;               //!<        
+    uint8_t     pair_init_mode;     //!<        
+    uint32_t    password;           //!< 
+}gap_security_param_t;
 
 /*
  * GLOBAL VARIABLES (全局变量)

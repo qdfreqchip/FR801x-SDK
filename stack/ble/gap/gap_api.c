@@ -35,6 +35,7 @@ app_callback_func_t gatt_service_final_ready;
  * LOCAL VARIABLES (本地变量)
  */
 static struct gapm_start_advertise_cmd adv_cmd;
+static gap_security_param_t sec_cmd = {false, false, 0, false, 0, 0};
 
 /*
  * LOCAL FUNCTIONS (本地函数)
@@ -104,6 +105,13 @@ void gap_set_cb_func(uint8_t event, gap_callback_func_t func)
             
         case GAP_EVT_ADV_END:
             appm_set_cb_func(APP_EVT_ID_ADV_END, (app_callback_func_t)func);
+            break;
+        
+        case GAP_EVT_PAIRING_REQ:
+            // 注意：很奇怪，这个协议栈命名，在app_sec.c中，gapc_bond_req_ind_handler()函数里面收到底层GAPC_PAIRING_REQ之后回调
+            // 注意：paring request是对方master发过来的。
+            // 这里要初始化一下gapc_bond_cfm 结构体然后回复，主要内容为io capbility之类
+            appm_set_cb_func(APP_EVT_ID_SLAVER_GOT_BOND_REQ, (app_callback_func_t)func);
             break;
 
         case GAP_EVT_BOND_SUCCESS:
@@ -281,16 +289,16 @@ void gap_dev_config(gap_cfg_t *p_gap_cfg)
 
 }
 	  
- /*********************************************************************
- * @fn      gap_start_advertising
- *
- * @brief   Start advertising.
- *			开始广播.
- *
- * @param   None.
- *
- * @return  None.
- */
+/*********************************************************************
+* @fn      gap_start_advertising
+*
+* @brief   Start advertising.
+*			开始广播.
+*
+* @param   None.
+*
+* @return  None.
+*/
 void gap_start_advertising(gap_adv_param_t *p_adv_param)
 {	
     if ( p_adv_param == NULL )  // 默认参数
@@ -415,11 +423,9 @@ void gap_conn_param_update(uint8_t conn_handle, uint16_t min_intv, uint16_t max_
  */
 
 
-#if 0
-/** @function group ble security APIs (ble中心设备相关的API)
+/** @function group ble security APIs (ble安全相关的API)
  * @{
  */
- 
 /*********************************************************************
 * @fn      gap_address_set
 *
@@ -429,18 +435,65 @@ void gap_conn_param_update(uint8_t conn_handle, uint16_t min_intv, uint16_t max_
 *
 * @return  None.
 */
-void gap_security_req(uint8_t conn_idx)
+void gap_security_param_init(gap_security_param_t sec_param)
+ {
+     // Security command init
+     sec_cmd.mitm               = sec_param.mitm;
+     sec_cmd.ble_secure_conn    = sec_param.ble_secure_conn;
+     sec_cmd.io_cap             = sec_param.io_cap;
+     sec_cmd.bond               = sec_param.bond;
+     sec_cmd.pair_init_mode     = sec_param.pair_init_mode;
+     sec_cmd.password           = sec_param.password;
+ }
+
+ 
+
+/*********************************************************************
+* @fn      gap_address_set
+*
+* @brief   Configure BLE mac address.
+*
+* @param   mac: 6 bytes MAC address
+*
+* @return  None.
+*/
+void gap_security_req(uint8_t conn_hdl)
  {
      // Send security request
      struct gapc_security_cmd *cmd = KE_MSG_ALLOC(GAPC_SECURITY_CMD,
-                                     KE_BUILD_ID(TASK_GAPC, conn_idx), TASK_APP,
+                                     KE_BUILD_ID(TASK_GAPC, conn_hdl), TASK_APP,
                                      gapc_security_cmd);
  
      cmd->operation = GAPC_SECURITY_REQ;
-     cmd->auth      = APP_SEC_GAP_AUTH;//GAP_AUTH_REQ_MITM_BOND;
+     // 注意这里，用来设定配对的方式，要不要绑定，要不要MITM之类
+     cmd->auth = GAP_AUTH_NONE;
+     if (sec_cmd.mitm == true)
+        cmd->auth |= GAP_AUTH_MITM;
+     if (sec_cmd.ble_secure_conn == true)
+        cmd->auth |= GAP_AUTH_SEC_CON;
+     if (sec_cmd.bond == true)
+        cmd->auth |= GAP_AUTH_BOND;
  
      // Send the message
      ke_msg_send(cmd);
  }
-#endif
+
+static void gap_paring_req_cb( void *p_param )
+{
+    struct gapc_bond_cfm *p_pair_cfm = (struct gapc_bond_cfm *)p_param;
+    p_pair_cfm->data.pairing_feat.auth = GAP_AUTH_NONE;
+    if (sec_cmd.mitm == true)
+       p_pair_cfm->data.pairing_feat.auth |= GAP_AUTH_MITM;
+    if (sec_cmd.ble_secure_conn == true)
+       p_pair_cfm->data.pairing_feat.auth |= GAP_AUTH_SEC_CON;
+    if (sec_cmd.bond == true)
+       p_pair_cfm->data.pairing_feat.auth |= GAP_AUTH_BOND;
+
+    p_pair_cfm->data.pairing_feat.iocap     = sec_cmd.io_cap;
+    p_pair_cfm->data.pairing_feat.key_size  = 16;
+    p_pair_cfm->data.pairing_feat.oob       = GAP_OOB_AUTH_DATA_NOT_PRESENT;
+    p_pair_cfm->data.pairing_feat.sec_req   = GAP_NO_SEC; //GAP_SEC1_SEC_CON_PAIR_ENC; Security level 这里要想一下
+    p_pair_cfm->data.pairing_feat.ikey_dist = GAP_KDIST_IDKEY;
+    p_pair_cfm->data.pairing_feat.rkey_dist = GAP_KDIST_ENCKEY | GAP_KDIST_IDKEY;
+}
  

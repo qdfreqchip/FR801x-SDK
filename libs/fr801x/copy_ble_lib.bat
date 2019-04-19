@@ -1,0 +1,1 @@
+cmd /c copy ..\..\libraries\prj\Objects\ble_4_2_app.lib fr801x_ble_4_2.lib

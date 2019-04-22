@@ -1,0 +1,53 @@
+;256k bytes, which is 2M ROM
+;ROM 0x00000000  0x40000
+
+;LR_RESET_JT 0x20000000 0x160 {
+LR_RESET_JT 0x20000000 0x14000 {
+    ER_RESET +0 {
+        boot_vectors.o(RESET, +FIRST)
+    }
+    
+    ER_JUMP_TABLE +0 {
+        *(jump_table)
+    }
+
+    ER_STACK 0x20000900 FIXED {
+		*(front_stack)
+	}
+	ER_DEEP_SLEEP +0 {
+		*(deep_sleep_code)
+	}
+	ER_ADV_SLEEP +0 {
+		*(adv_sleep_code)
+	}	
+    ER_ROM1 +0 {
+		*(+RO)
+	}
+    ER_RW +0 {
+        *(+RW)
+    }
+    ER_ZI +0 {
+        *(+ZI)
+    }
+    KE_HEAP +0 {
+        *(ke_heap)
+    }
+	USER_HEAP +0 {
+        *(user_heap)
+    }
+} 
+
+;LR_ROM1 0x20000700 (0x4000-0x700) {  
+;	ER_ROM1 +0 {
+;		*(+RO)
+;		*(+RW)
+;	}
+;   
+;    ER_ZI +0 {
+;        *(+ZI)
+;    }
+;    
+;    USER_RE_RAM +0 {
+;        *(retention_ram)
+;    }
+;}

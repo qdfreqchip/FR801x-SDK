@@ -427,6 +427,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>driver_gpio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\drivers\inc\driver_gpio.h</FilePath>
+            </File>
+            <File>
+              <FileName>driver_iomux.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\drivers\inc\driver_iomux.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

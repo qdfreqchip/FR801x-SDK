@@ -8,16 +8,25 @@
 #ifndef OS_TIMER_H
 #define OS_TIMER_H
 
-typedef void osal_timer_struct;
+#include "stdbool.h"
 
 typedef void(* osal_timer_func_t)(void *parg);
+
+typedef struct 
+{
+    struct osal_timer_struct *timer_next;
+    uint32_t timer_period;      //for loop OR period =0 for single run.
+    osal_timer_func_t timer_func;
+    void *timer_arg;
+    uint16_t timer_id;
+} osal_timer_struct;
 
 
 /*********************************************************************
  * @fn      osal_timer_init
  *
  * @brief   Initialize an OS timer and malloc a buffer for it.
- *			åˆ†é…ä¸€ä¸ªç¼“å†²åŒºå¹¶åˆå§‹åŒ–ä¸€ä¸ªOSå®šæ—¶å™¨.
+ *			·ÖÅäÒ»¸ö»º³åÇø²¢³õÊ¼»¯Ò»¸öOS¶¨Ê±Æ÷.
  *
  * @param   ptimer - pointer to the timer buffer.
  *			pfunction - callback of the timer
@@ -30,7 +39,7 @@ void osal_timer_init(osal_timer_struct *ptimer, osal_timer_func_t pfunction, voi
  * @fn      osal_timer_start
  *
  * @brief   Start a timer.
- *			è§¦å‘Timer.
+ *			´¥·¢Timer.
  *
  * @param   ptimer - pointer to the timer buffer.
  *			ms - expire of the timer with milliseconds
@@ -43,7 +52,7 @@ void osal_timer_start(osal_timer_struct *ptimer,uint32_t ms,bool repeat_flag);
  * @fn      osal_timer_stop
  *
  * @brief   Stop a timer.
- *			åœæ­¢timer.
+ *			Í£Ö¹timer.
  *
  * @param   ptimer - pointer to the timer buffer.
  *

@@ -2,8 +2,7 @@ BRIEFING
 
 Tsingtao Freqchip Bluetooth low energy SDK for FR801x series (FR8012/FR8016/FR8018).
 This SDK has been verified on Freqchip official EVM.
-
-青岛富芮坤低功耗蓝牙软件开发包(BLE SDK)适用于该公司出品的FR801X系列低功耗蓝牙芯片(FR8012/FR8016/FR8018)。
+  青岛富芮坤低功耗蓝牙软件开发包(BLE SDK)适用于该公司出品的FR801X系列低功耗蓝牙芯片(FR8012/FR8016/FR8018)。
 该SDK适用于青岛富芮坤公司出品的官方EVM。
 
 CONTENTS

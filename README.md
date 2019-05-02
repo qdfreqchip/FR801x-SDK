@@ -8,11 +8,11 @@ This SDK has been verified on Freqchip official EVM.
 
 CONTENTS
 
-* ./drivers:  Including all the supported peripheral drivers.
-* ./examples: All the sample codes we provide. More examples are added from time to time.
-* ./libs:     Low layer and OS library for different chips.
-* ./osal:     OS adaptor layer.
-* ./stack:    Specific codes related to BLE stack.
+* ./drivers:  Including all the supported peripheral drivers, I2C, UART, GPIO, etc. 包含所有外设驱动接口，I2C, UART, GPIO 等。
+* ./examples: All the sample codes we provide. More examples are added from time to time. 包含各种例程代码，后续会不停添加更多
+* ./libs:     Low layer and OS library for different chips. 底层库文件。
+* ./osal:     OS adaptor layer. 简单操作系统API。
+* ./stack:    Specific codes related to BLE stack. 蓝牙协议栈接口。
 
 BUILDING IMAGE
 
@@ -22,6 +22,6 @@ BUILDING IMAGE
 
 MORE
 
-* Feel free to access the developer forum: http://www.freqchip.net 
-* WeChat Public Account: FREQCHIP
+* Feel free to access the developer forum: http://www.freqchip.net . 开发者论坛： http://www.freqchip.net
+* WeChat Public Account: FREQCHIP . 微信公众号：FREQCHIP。
  
